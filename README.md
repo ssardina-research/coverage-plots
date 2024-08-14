@@ -36,7 +36,7 @@ An example run on [data_stats.csv](data_stats.csv) would be:
 The same charts can be produced with Nitin's R script [r-plot/plots.R](r-plot/plots.R).
 
 
-## Setup
+### Setup
 
 The script requires R.
 
@@ -47,7 +47,7 @@ $ Rscript -e 'install.packages("dplyr")'
 $ Rscript -e 'install.packages("ggplot2")'
 ```
 
-## Generating plots
+### Generating plots
 
 First, state the file to read from in `plot.R` line as well as other configuration parameters under the `CONSTANT` section:
 
