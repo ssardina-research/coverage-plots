@@ -6,35 +6,32 @@ This repo contains R and Python code to produce **time-coverage integrated plots
 
 ![coverage-cfond.png](coverage-cfond-ecai23.png)
 
-
 There is one subplot per domain. Each planner shows the coverage % in the domain, and the average time on top of scatter plot of each instance.
-
 
 ## CSV data table files
 
 The script require a CSV file containing the following columns:
 
-* `solver`: name of solver (e.g., planner)
-* `domain`: name of domain (e.g., `blocksworld`)
+* `solver`: name of solver (e.g., planner).
+* `domain`: name of domain (e.g., `blocksworld`).
 * `status`: integer stating the result of the run, with `1` denoting _solved successfully_.
 * `solved`: boolean stating if run was solved.
 * `cputime`: time taken.
 
 
 
-## Seaborn-based Python plots
+## 1. Seaborn-based Python plots
 
-Notebook [coverage_plots.ipynb](coverage_plots.ipynb) plot integrated time-coverage plots using Seaborn Python package.
+Notebook [coverage_plots.ipynb](coverage_plots.ipynb) plot integrated time-coverage plots using [Seaborn](https://seaborn.pydata.org/) Python visualization package.
 
 An example run on [data_stats.csv](data_stats.csv) would be:
 
 ![plot](data_stats_plot.png)
 
 
-## R plots
+## 2. R plots
 
 The same charts can be produced with Nitin's R script [r-plot/plots.R](r-plot/plots.R).
-
 
 ### Setup
 
