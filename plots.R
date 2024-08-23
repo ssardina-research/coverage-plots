@@ -9,7 +9,7 @@
 #       domain: name of the planning domain
 #       solver: name of the solver/solver
 #       instance_id: id of the planning problem
-#       status: 1 if problem was solved, 0 otherwise (we could have others, e.g., memory out)
+#       status: 1 if problem was solved, -1 if ran out of time, -2 if ran out of memory and 0 if could not solve for other reasons
 #       cputime: cputime take to solve the problem, -1 if the planer ran out of resources
 #
 #       domain,instance,solver,status,cputime
@@ -25,27 +25,27 @@
 #       domain_1,p10,PLN_1,1,874.812547986277
 ####
 
+######################################
+#### import the required libraries for plotting
+######################################
+library(ggplot2)
+library(dplyr)
 
 ######################################
 #### SET YOUR CONSTANTS
 ######################################
-main_file <- "data_stats"
+main_file = "data_stats"
 
-plot_width <- 15
-plot_height <- 12
-plot_dpi <- 300
+plot_width = 15
+plot_height = 12
+plot_dpi = 300
 
 ######################################
 
 
-csv_file <- paste(main_file, ".csv", sep="")
-output_pdf <- paste(main_file, "_R.pdf", sep="")
-output_png <- paste(main_file, "_R.png", sep="")
-
-
-# import the required libraries for plotting
-library(ggplot2)
-library(dplyr)
+csv_file = paste(main_file, ".csv", sep="")
+output_pdf = paste(main_file, "_R.pdf", sep="")
+output_png = paste(main_file, "_R.png", sep="")
 
 # read the csv
 df = read.csv(csv_file)
@@ -55,12 +55,20 @@ df$solver = factor(df$solver, levels = sort(unique(df$solver)))
 df$domain = factor(df$domain, levels = sort(unique(df$domain)))
 
 # compute the coverage by grouping by domain and solver, and then computing the mean
+###
+# The Benchexec script uses the following notation
+# { "true": 1, "false": 0, "True": 1, "False": 0, False: 0, True: 1, "OUT OF MEMORY (false)": -2, "TIMEOUT (false)": -1, "TIMEOUT (true)": 1 }
+# 
+# We need to use 1 for solved, and 0 for not solved
+###
+df <- df %>% mutate(solved_int = ifelse(status == 1, 1, 0))
 df_c = df %>%
         group_by(domain, solver) %>%
-        summarise(coverage = mean(status))
+        summarise(coverage = mean(solved_int))
 
 # scale the y coordinate slightly to show clearly on plots
-df_c$coverage_y = df_c$coverage*125
+span_coverage = max(df$cputime)*0.95
+df_c$coverage_x = span_coverage*0.5 (1 + df_c$coverage)
 
 # create a coverage label
 df_c$coverage_label = paste(round(df_c$coverage*100, 2), "%", sep="")
@@ -82,10 +90,12 @@ df_means$p_y = as.numeric(df_means$solver)
 p = ggplot(df, aes(cputime, solver))
 
 # add time scatter plot per solver, with bar
-p = p + geom_segment(aes(x=0, xend=coverage_y+1000, y = solver, yend = solver), data=df_c, color="grey50") + geom_point(size=2,aes(colour = solver, shape=solver),show.legend = FALSE)
+p = p + geom_segment(aes(x=0, xend=coverage_x, y = solver, yend = solver), data=df_c, color="grey50") + 
+  geom_point(size=2,aes(colour = solver, shape=solver),show.legend = FALSE) + 
+  scale_shape_manual(values=seq(0,15))
 
 # add coverage number text in rounded box with % at the end of the bar
-p = p + geom_label(aes(x=coverage_y+1000, y=solver, label=coverage_label), data=df_c, size=3)
+p = p + geom_label(aes(x=coverage_x, y=solver, label=coverage_label), data=df_c, size=3)
 
 # add mean time vertical mark and number per solver
 p = p + geom_segment(aes(x=mean_time, xend=mean_time, y = p_y-0.2, yend=p_y+0.2), data=df_means, linewidth=0.8, color="grey30")
