@@ -76,9 +76,9 @@ df_c$coverage_label = paste(round(df_c$coverage*100, 2), "%", sep="")
 
 ## compute the average cputime for the solved instances
 df_means = df %>%
-          filter(status==1) %>%
-          group_by(domain, solver) %>%
-          summarise(mean_time = mean(cputime))
+  filter(status==1) %>%
+  group_by(domain, solver) %>%
+  summarise(mean_time = mean(cputime))
 
 # create a label by rounding to 1 decimal place
 df_means$mean_label = round(df_means$mean_time,1)
@@ -87,7 +87,8 @@ df_means$mean_label = round(df_means$mean_time,1)
 df_means$p_y = as.numeric(df_means$solver)
 
 # build basic plot  with time x and planer y axes
-p = ggplot(df, aes(cputime, solver))
+df_solved = df[df$solved_int==1,]
+p = ggplot(df_solved, aes(cputime, solver))
 
 # add time scatter plot per solver, with bar
 p = p + geom_segment(aes(x=0, xend=coverage_x, y = solver, yend = solver), data=df_c, color="grey50") + 
