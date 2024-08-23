@@ -68,7 +68,7 @@ df_c = df %>%
 
 # scale the y coordinate slightly to show clearly on plots
 span_coverage = max(df$cputime)*0.95
-df_c$coverage_x = span_coverage*0.5 (1 + df_c$coverage)
+df_c$coverage_x = span_coverage*0.5 *(1 + df_c$coverage)
 
 # create a coverage label
 df_c$coverage_label = paste(round(df_c$coverage*100, 2), "%", sep="")
