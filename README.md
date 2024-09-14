@@ -19,7 +19,6 @@ The script require a CSV file containing the following columns:
 * `cputime`: time taken.
 
 
-
 ## 1. Seaborn-based Python plots
 
 Notebook [coverage_plots.ipynb](coverage_plots.ipynb) plot integrated time-coverage plots using [Seaborn](https://seaborn.pydata.org/) Python visualization package.
@@ -114,4 +113,8 @@ Then, you can use [RStudio](https://posit.co/download/rstudio-desktop/) or simpl
 $ R < plots.R --no-save
 ```
 
-This should produce a PDF file and a PNG file with the plots.
+This should produce a PDF file and a PNG file with the plots:
+
+![plot](data_stats_R.png)
+
+Note this R script will plot _all_ the data in the CSV file; any projection/filtering on some domains/solvers would need to be done beforehand at the time of producing the CSV file.
