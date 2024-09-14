@@ -26,7 +26,7 @@ Notebook [coverage_plots.ipynb](coverage_plots.ipynb) plot integrated time-cover
 
 An example run on [data_stats.csv](data_stats.csv) would be:
 
-![plot](data_stats_plot.png)
+![plot](data_stats_plot_PRP.png)
 
 
 ## 2. Coverage Plots in R
